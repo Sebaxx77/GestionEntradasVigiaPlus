@@ -74,7 +74,7 @@ class AgendamientoController extends Controller
             Mail::to('sebastian.piamba@vigiaplus.com')->send((new AgendamientoAprobadoMail($agendamiento)));
 
             return response()->json([
-                'message' => 'Solicitud aprobada y correo enviado.',
+                'message' => 'Solicitud aprobada y correo de confirmación enviado a Recepción Parque Industrial San Diego y Seguridad Colombia.',
                 'agendamiento' => $agendamiento
             ]);
         }
@@ -88,7 +88,7 @@ class AgendamientoController extends Controller
                 ->send(new AgendamientoRechazadoMail($agendamiento));
 
             return response()->json([
-                'message' => 'Solicitud rechazada y correo enviado.',
+                'message' => 'Solicitud rechazada y correo de respuesta enviado.',
                 'agendamiento' => $agendamiento
             ]);
         }

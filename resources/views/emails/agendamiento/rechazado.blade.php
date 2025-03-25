@@ -1,14 +1,24 @@
 <x-mail::message>
-# Agendamiento Rechazado
+    # Agendamiento Rechazado
 
-Lamentamos informarte que tu solicitud de agendamiento con los siguientes detalles ha sido rechazada:
+    Lamentamos informarte que tu solicitud de agendamiento con OP: **{{ $agendamiento->op }}** ha sido {{
+    $agendamiento->estatus }}.
 
-- **OP:** {{ $agendamiento->op }}
-- **Fecha de entrega:** {{ $agendamiento->fecha_entrega }}
-- **Proveedor:** {{ $agendamiento->proveedor }}
+    **Detalles de la solicitud:**
 
-Si consideras que se trata de un error o necesitas mayor información, por favor adjunta esta solicitud y responde a el siguiente correo sebastian.piamba@vigiaplus.com
+    - **Fecha de Agendamiento:** {{ $agendamiento->fecha_entrega }}
+    - **Proveedor:** {{ $agendamiento->proveedor }}
+    - **Placa:** {{ $agendamiento->placa }}
+    - **Conductor:** {{ $agendamiento->conductor }}
+    - **Cédula:** {{ $agendamiento->cedula }}
+    - **Bodega:** {{ $agendamiento->bodega }}
+    - **Correo solicitante:** {{ $agendamiento->correo_solicitante }}
 
-Gracias,<br>
-{{ config('app.name') }}
+    - **Autorizador:** {{ $agendamiento->autorizador }}
+
+    Si consideras que se trata de un error o necesitas mayor información, por favor adjunta esta solicitud y responde a
+    el siguiente correo sebastian.piamba@vigiaplus.com
+
+    Gracias,<br>
+    {{ config('app.name') }}
 </x-mail::message>

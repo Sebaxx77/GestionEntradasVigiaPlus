@@ -1,22 +1,22 @@
 <x-mail::message>
-# NOTIFICACIONES A SEGURIDAD
+    # NOTIFICACIONES AL PARQUE
 
-Se ha aprobado un agendamiento de ingreso con los siguientes datos:
+    Se ha aprobado un agendamiento con los siguientes datos para la fecha: {{ $agendamiento->fecha_programada_entrega
+    }}.
 
-- **OP:** {{ $agendamiento->op }}
-- **Proveedor:** {{ $agendamiento->proveedor }}
-- **Fecha de entrega:** {{ $agendamiento->fecha_entrega }}
-- **Autorizador:** {{ $agendamiento->autorizador }}
-- **Fecha programada de entrega:** {{ $agendamiento->fecha_programada_entrega }}
+    - **Comentarios:** {{ $agendamiento->texto_respuesta_correo }}
 
-**Campo de aprobación:** (Aquí puedes resaltar el campo que sirva como aprobación, si es un valor específico)
+    **Detalles de la solicitud:**
+    - **Estatus:** {{ $agendamiento->estatus }}
+    - **Numero de OP** {{ $agendamiento->op}}
+    - **Proveedor:** {{ $agendamiento->proveedor }}
+    - **Placa:** {{ $agendamiento->placa }}
+    - **Conductor:** {{ $agendamiento->conductor }}
+    - **Cédula:** {{ $agendamiento->cedula }}
+    - **Bodega:** {{ $agendamiento->bodega }}
 
-**Correo solicitante:** {{ $agendamiento->correo_solicitante }}
+    - **Autorizador:** {{ $agendamiento->autorizador }}
 
-<x-mail::button :url="url('/')">
-Ver más detalles
-</x-mail::button>
-
-Gracias,<br>
-{{ config('app.name') }}
+    Gracias,<br>
+    {{ config('app.name') }}
 </x-mail::message>

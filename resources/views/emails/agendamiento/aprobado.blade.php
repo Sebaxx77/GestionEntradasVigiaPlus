@@ -1,19 +1,19 @@
 <x-mail::message>
-# Agendamiento Aprobado
+    # Agendamiento Aprobado
 
-Tu solicitud de agendamiento con OP: **{{ $agendamiento->op }}** ha sido aprobada.
+    Tu solicitud de agendamiento con OP: **{{ $agendamiento->op }}** ha sido {{ $agendamiento->estatus }} para el dia:
+    {{ $agendamiento->fecha_programada_entrega }}.
 
-**Detalles de la solicitud:**
-- **Fecha de entrega:** {{ $agendamiento->fecha_entrega }}
-- **Proveedor:** {{ $agendamiento->proveedor }}
-- **Autorizador:** {{ $agendamiento->autorizador }}
-- **Fecha programada de entrega:** {{ $agendamiento->fecha_programada_entrega }}
-- **Comentarios:** {{ $agendamiento->texto_respuesta_correo }}
+    - **Comentarios:** {{ $agendamiento->texto_respuesta_correo }}
 
-<x-mail::button :url="url('/')">
-Ver detalles
-</x-mail::button>
+    **Detalles de la solicitud:**
+    - **Proveedor:** {{ $agendamiento->proveedor }}
+    - **Placa:** {{ $agendamiento->placa }}
+    - **Conductor:** {{ $agendamiento->conductor }}
+    - **Cédula:** {{ $agendamiento->cedula }}
+    - **Bodega:** {{ $agendamiento->bodega }}
 
-Gracias,<br>
-{{ config('app.name') }}
+
+    Gracias,<br>
+    {{ config('app.name') }}
 </x-mail::message>
