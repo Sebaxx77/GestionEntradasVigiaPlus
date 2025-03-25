@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgendamientoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('api')->group(function () {
+    // Crear un agendamiento (POST)
+    Route::post('/agendamientos', [AgendamientoController::class, 'store']);
+    
+    // Actualizar un agendamiento (PUT/PATCH)
+    Route::put('/agendamientos/{id}', [AgendamientoController::class, 'update']);
+    
+    // Consultar/agregar listado de agendamientos (GET)
+    Route::get('/agendamientos', [AgendamientoController::class, 'index']);
 });
