@@ -1,7 +1,5 @@
-@component('mail::message')
+<x-mail::message>
 # Agendamiento Aprobado
-
-Estimado usuario,
 
 Tu solicitud de agendamiento con OP: **{{ $agendamiento->op }}** ha sido aprobada.
 
@@ -12,10 +10,10 @@ Tu solicitud de agendamiento con OP: **{{ $agendamiento->op }}** ha sido aprobad
 - **Fecha programada de entrega:** {{ $agendamiento->fecha_programada_entrega }}
 - **Comentarios:** {{ $agendamiento->texto_respuesta_correo }}
 
-@component('mail::button', ['url' => url('/')])
+<x-mail::button :url="url('/')">
 Ver detalles
-@endcomponent
+</x-mail::button>
 
 Gracias,<br>
 {{ config('app.name') }}
-@endcomponent
+</x-mail::message>
