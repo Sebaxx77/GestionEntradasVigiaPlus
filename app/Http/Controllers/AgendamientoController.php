@@ -6,6 +6,7 @@ use App\Models\Agendamiento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AgendamientoAprobadoMail;
+use App\Mail\AgendamientoRechazadoMail;
 
 class AgendamientoController extends Controller
 {
@@ -81,8 +82,13 @@ class AgendamientoController extends Controller
         // Lógica para el caso de rechazo
         if ($validated['estatus'] === 'rechazada') {
             $agendamiento->update($validated);
+
+            // Enviar correo al solicitante con el Mailable de rechazo
+            Mail::to($agendamiento->correo_solicitante)
+                ->send(new AgendamientoRechazadoMail($agendamiento));
+
             return response()->json([
-                'message' => 'Solicitud rechazada.',
+                'message' => 'Solicitud rechazada y correo enviado.',
                 'agendamiento' => $agendamiento
             ]);
         }
