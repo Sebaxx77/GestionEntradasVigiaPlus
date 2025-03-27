@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgendamientoController;
+use App\Http\Controllers\Agendamientos\AgendamientoFormatoDescargaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,13 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('api')->group(function () {
-    // Crear un agendamiento (POST)
-    Route::post('/agendamientos', [AgendamientoController::class, 'store']);
-    
-    // Actualizar un agendamiento (PUT/PATCH)
-    Route::put('/agendamientos/{id}', [AgendamientoController::class, 'update']);
-    
-    // Consultar/agregar listado de agendamientos (GET)
-    Route::get('/agendamientos', [AgendamientoController::class, 'index']);
+Route::prefix('agendamiento/formato-descarga')->group(function () {
+    // Ruta para recibir los datos del formulario (POST)
+    Route::post('/', [AgendamientoFormatoDescargaController::class, 'storeFormatoDescarga'])->name('api.agendamiento.formato-descarga.store');
+
+    // Ruta para obtener solicitudes de formato-descarga y enviarlas a la UI
+    Route::get('/', [AgendamientoFormatoDescargaController::class, 'indexFormatoDescarga'])->name('api.agendamiento.formato-descarga.index');
 });
+

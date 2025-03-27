@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Agendamientos;
 
+use App\Http\Controllers\Controller;
 use App\Models\Agendamiento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AgendamientoAprobadoMail;
 use App\Mail\AgendamientoRechazadoMail;
 
-class AgendamientoController extends Controller
+class AgendamientoFormatoDescargaController extends Controller
 {
     /**
      * Registra una nueva solicitud de agendamiento en estado "pendiente".
