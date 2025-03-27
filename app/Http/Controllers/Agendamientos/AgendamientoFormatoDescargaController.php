@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Agendamientos;
 
 use App\Http\Controllers\Controller;
-use App\Models\Agendamiento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AgendamientoAprobadoMail;
@@ -38,6 +37,7 @@ class AgendamientoFormatoDescargaController extends Controller
             'autorizador'              => null,
             'fecha_programada_entrega' => null,
             'texto_respuesta_correo'   => null,
+            'tipo'                     => 'formato_descarga', // Campo para diferenciar el tipo
         ]);
 
         // Retornamos la respuesta en formato JSON
@@ -104,7 +104,7 @@ class AgendamientoFormatoDescargaController extends Controller
     {
         // Ejemplo: ?estatus=pendiente
         $estatus = $request->query('estatus', 'pendiente');
-        $agendamientos = AgendamientoFormatoDescarga::where('estatus', $estatus)->get();
+        $agendamientos = AgendamientoFormatoDescarga::where('estatus', $estatus)->where('tipo', 'formato-descarga')->get();
 
         return response()->json([
             'agendamientos' => $agendamientos
