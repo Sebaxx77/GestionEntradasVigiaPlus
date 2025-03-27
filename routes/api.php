@@ -17,10 +17,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('agendamiento/formato-descarga')->group(function () {
-    // Ruta para recibir los datos del formulario (POST)
-    Route::post('/', [AgendamientoFormatoDescargaController::class, 'storeFormatoDescarga'])->name('api.agendamiento.formato-descarga.store');
+    // Ruta para crear un formato descarga (POST)
+    Route::post('/', [AgendamientoFormatoDescargaController::class, 'store'])->name('api.agendamiento.formato-descarga.store');
 
-    // Ruta para obtener solicitudes de formato-descarga y enviarlas a la UI
-    Route::get('/', [AgendamientoFormatoDescargaController::class, 'indexFormatoDescarga'])->name('api.agendamiento.formato-descarga.index');
+    // Ruta para actualizar (por ejemplo, aprobación/rechazo) de un formato descarga (PUT)
+    Route::put('/{id}', [AgendamientoFormatoDescargaController::class, 'update'])->name('api.agendamiento.formato-descarga.update');
+
+    // Ruta para obtener los formatos descarga filtrados por estado (GET)
+    Route::get('/', [AgendamientoFormatoDescargaController::class, 'index'])->name('api.agendamiento.formato-descarga.index');
 });
 
