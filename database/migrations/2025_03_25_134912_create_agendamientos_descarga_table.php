@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         // Tabla agendamientos para almacenar los datos que se reciben del formulario de agendamiento en la UI
-        Schema::create('agendamientos', function (Blueprint $table) {
+        Schema::create('agendamientos_descarga', function (Blueprint $table) {
             $table->id(); // Identificador unico id para cada agendamiento
             $table->integer('op'); // Campo entero Orden de Producción
             $table->date('fecha_entrega'); // Fecha de entrega
@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('correo_solicitante'); // Correo del solicitante
             $table->text('texto_respuesta_correo')->nullable(); // Texto de respuesta del correo
             $table->integer('celular')->nullable(); // Celular del solicitante
+            $table->string('tipo')->nullable(); // Campo 'tipo' para diferenciar el formato
             $table->timestamps(); // Fecha de creación y modificación
             $table->softDeletes(); // Fecha de eliminación lógica
         });
@@ -34,6 +35,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('agendamientos');
+        Schema::dropIfExists('agendamientos_descarga');
     }
 };
