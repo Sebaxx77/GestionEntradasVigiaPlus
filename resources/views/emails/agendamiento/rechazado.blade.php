@@ -14,7 +14,7 @@
     - **Bodega:** {{ $agendamiento->bodega }}
     - **Correo solicitante:** {{ $agendamiento->correo_solicitante }}
 
-    - **Autorizador:** {{ $agendamiento->autorizador }}
+    - **Comentarios:** {{ $agendamiento->texto_respuesta_correo }}
 
     Si consideras que se trata de un error o necesitas mayor información, por favor adjunta esta solicitud y responde a
     el siguiente correo sebastian.piamba@vigiaplus.com
