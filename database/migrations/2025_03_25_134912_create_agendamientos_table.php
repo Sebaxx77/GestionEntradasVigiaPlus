@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('proveedor'); // Proveedor
             $table->string('codigo_articulo')->nullable(); // Código correspondiente a el artículo a entregar
             $table->string('nombre_articulo')->nullable(); // Nombre del artículo a entregar
-            $table->string('cantidades_pedidas')->nullable(); // Cantidades pedidas del artículo
+            $table->integer('cantidades_pedidas')->nullable(); // Cantidades pedidas del artículo
             $table->string('placa')->nullable(); // Placa del vehículo
             $table->string('conductor')->nullable(); // Nombre del conductor
             $table->string('cedula')->nullable(); // Cédula del conductor
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->date('fecha_programada_entrega')->nullable(); // Fecha programada de entrega
             $table->string('correo_solicitante'); // Correo del solicitante
             $table->text('texto_respuesta_correo')->nullable(); // Texto de respuesta del correo
-            $table->string('celular')->nullable(); // Celular del solicitante
+            $table->integer('celular')->nullable(); // Celular del solicitante
             $table->timestamps(); // Fecha de creación y modificación
             $table->softDeletes(); // Fecha de eliminación lógica
         });
