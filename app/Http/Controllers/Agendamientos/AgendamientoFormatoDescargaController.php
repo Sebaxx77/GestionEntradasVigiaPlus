@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AgendamientoAprobadoMail;
 use App\Mail\AgendamientoRechazadoMail;
+use App\Models\Agendamientos\AgendamientoFormatoDescarga;
 
 class AgendamientoFormatoDescargaController extends Controller
 {
@@ -32,7 +33,7 @@ class AgendamientoFormatoDescargaController extends Controller
             'celular'               => 'required|string|max:20',
         ]);
 
-        $agendamiento = Agendamiento::create($validated + [
+        $agendamiento = AgendamientoFormatoDescarga::create($validated + [
             'estatus'                  => 'pendiente',
             'autorizador'              => null,
             'fecha_programada_entrega' => null,
@@ -51,7 +52,7 @@ class AgendamientoFormatoDescargaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $agendamiento = Agendamiento::findOrFail($id);
+        $agendamiento = AgendamientoFormatoDescarga::findOrFail($id);
 
         // Validamos que se envíe el campo "estatus" con uno de los valores permitidos
         $validated = $request->validate([
@@ -103,7 +104,7 @@ class AgendamientoFormatoDescargaController extends Controller
     {
         // Ejemplo: ?estatus=pendiente
         $estatus = $request->query('estatus', 'pendiente');
-        $agendamientos = Agendamiento::where('estatus', $estatus)->get();
+        $agendamientos = AgendamientoFormatoDescarga::where('estatus', $estatus)->get();
 
         return response()->json([
             'agendamientos' => $agendamientos

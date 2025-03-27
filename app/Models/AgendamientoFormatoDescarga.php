@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Agendamientos;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Agendamiento extends Model
+class AgendamientoFormatoDescarga extends Model
 {
     use HasFactory, SoftDeletes;
 
