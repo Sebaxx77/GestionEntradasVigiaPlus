@@ -104,7 +104,7 @@ class AgendamientoFormatoDescargaController extends Controller
     {
         // Ejemplo: ?estatus=pendiente
         $estatus = $request->query('estatus', 'pendiente');
-        $agendamientos = AgendamientoFormatoDescarga::where('estatus', $estatus)->where('tipo', 'formato-descarga')->get();
+        $agendamientos = AgendamientoFormatoDescarga::where('estatus', $estatus)->where('tipo', 'formato_descarga')->get();
 
         return response()->json([
             'agendamientos' => $agendamientos

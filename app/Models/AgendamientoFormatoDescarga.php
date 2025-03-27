@@ -11,6 +11,13 @@ class AgendamientoFormatoDescarga extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * Nombre de la tabla asociada al modelo.
+     *
+     * @var string
+     */
+    protected $table = 'agendamiento_descarga';
+
+    /**
      * Los atributos que se pueden asignar de manera masiva.
      *
      * @var array
@@ -32,5 +39,6 @@ class AgendamientoFormatoDescarga extends Model
         'correo_solicitante',
         'texto_respuesta_correo',
         'celular',
+        'tipo', // Campo para identificar el formato, por ejemplo: "formato_descarga"
     ];
 }
