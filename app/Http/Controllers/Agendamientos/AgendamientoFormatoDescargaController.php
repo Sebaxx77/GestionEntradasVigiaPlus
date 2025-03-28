@@ -23,7 +23,7 @@ class AgendamientoFormatoDescargaController extends Controller
             'proveedor'             => 'required|string|max:255',
             'codigo_articulo'       => 'required|string|max:100',
             'nombre_articulo'       => 'required|string|max:255',
-            'cantidades_pedidas'    => 'required|string|max:50',
+            'cantidades_pedidas'    => 'required|integer', // Se modifica el campo a integer
             'placa'                 => 'required|string|max:20',
             'conductor'             => 'required|string|max:255',
             'cedula'                => 'required|string|max:20',
