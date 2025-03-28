@@ -15,7 +15,7 @@ class AgendamientoFormatoDescarga extends Model
      *
      * @var string
      */
-    protected $table = 'agendamiento_descarga';
+    protected $table = 'agendamientos_descarga'; // Se modifca el nombre de la tabla a plural para que concuerde con la migración
 
     /**
      * Los atributos que se pueden asignar de manera masiva.
