@@ -14,20 +14,20 @@ return new class extends Migration
             $table->integer('op'); // Campo entero Orden de Producción
             $table->date('fecha_entrega'); // Fecha de entrega
             $table->string('proveedor'); // Proveedor
-            $table->string('codigo_articulo')->nullable(); // Código correspondiente a el artículo a entregar
-            $table->string('nombre_articulo')->nullable(); // Nombre del artículo a entregar
-            $table->integer('cantidades_pedidas')->nullable(); // Cantidades pedidas del artículo
-            $table->string('placa')->nullable(); // Placa del vehículo
-            $table->string('conductor')->nullable(); // Nombre del conductor
-            $table->string('cedula')->nullable(); // Cédula del conductor
-            $table->string('bodega')->nullable(); // Bodega a la que se dirige
+            $table->string('codigo_articulo'); // Código correspondiente a el artículo a entregar
+            $table->string('nombre_articulo'); // Nombre del artículo a entregar
+            $table->integer('cantidades_pedidas'); // Cantidades pedidas del artículo
+            $table->string('placa'); // Placa del vehículo
+            $table->string('conductor'); // Nombre del conductor
+            $table->string('cedula'); // Cédula del conductor
+            $table->string('bodega'); // Bodega a la que se dirige
             $table->enum('estatus', ['pendiente', 'aprobada', 'rechazada'])->default('pendiente'); // Estatus de la solicitud
             $table->string('autorizador')->nullable(); // Nombre del autorizador
             $table->date('fecha_programada_entrega')->nullable(); // Fecha programada de entrega
             $table->string('correo_solicitante'); // Correo del solicitante
             $table->text('texto_respuesta_correo')->nullable(); // Texto de respuesta del correo
-            $table->integer('celular')->nullable(); // Celular del solicitante
-            $table->string('tipo')->nullable(); // Campo 'tipo' para diferenciar el formato
+            $table->string('celular'); // Celular del solicitante, tipo string
+            $table->string('tipo'); // Campo 'tipo' para diferenciar el formato
             $table->timestamps(); // Fecha de creación y modificación
             $table->softDeletes(); // Fecha de eliminación lógica
         });
