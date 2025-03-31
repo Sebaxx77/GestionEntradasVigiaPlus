@@ -121,5 +121,14 @@ class AgendamientoFormatoDescargaController extends Controller
             'agendamientos' => $agendamientos
         ]);
     }
+    public function todas()
+    {
+        // Obtener todos los registros de la tabla "agendamientos"
+        $agendamientos = AgendamientoFormatoDescarga::all();
+
+        return response()->json([
+            'agendamientos' => $agendamientos
+        ]);
+    }
 
 }
