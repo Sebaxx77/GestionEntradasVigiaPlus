@@ -83,7 +83,13 @@ class AgendamientoFormatoDescargaController extends Controller
 
         // Lógica para el caso de rechazo
         if ($validated['estatus'] === 'rechazada') {
-            $agendamiento->update($validated);
+
+            $additionalValidated = $request->validate([
+                'texto_respuesta_correo'   => 'required|string',
+            ]);
+            
+            // Actualizamos el agendamiento con los datos adicionales
+            $agendamiento->update($additionalValidated + $validated);
 
             // Enviar correo al solicitante con el Mailable de rechazo
             Mail::to($agendamiento->correo_solicitante)
