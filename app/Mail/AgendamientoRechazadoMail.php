@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Agendamiento;
+use App\Models\Agendamientos\AgendamientoFormatoDescarga;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -21,9 +21,9 @@ class AgendamientoRechazadoMail extends Mailable
     /**
      * Crea una nueva instancia del mensaje.
      *
-     * @param Agendamiento $agendamiento
+     * @param AgendamientoFormatoDescarga $agendamiento
      */
-    public function __construct(Agendamiento $agendamiento)
+    public function __construct(AgendamientoFormatoDescarga $agendamiento)
     {
         $this->agendamiento = $agendamiento;
     }
