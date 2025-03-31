@@ -24,7 +24,9 @@ Route::prefix('agendamientos/formato-descarga')->group(function () {
     // Ruta para actualizar (por ejemplo, aprobación/rechazo) de un formato descarga (PUT)
     Route::put('/{id}', [AgendamientoFormatoDescargaController::class, 'update'])->name('api.agendamiento.formato-descarga.update');
 
-    // Ruta para obtener los formatos descarga filtrados por estado (GET)
-    Route::get('/', [AgendamientoFormatoDescargaController::class, 'index'])->name('api.agendamiento.formato-descarga.index');
-});
+    // Ruta para obtener los formatos descarga en estado aprobado/rechazado (GET)
+    Route::get('/otros', [AgendamientoFormatoDescargaController::class, 'otros'])->name('api.agendamiento.formato-descarga.otros');
 
+    // Ruta para obtener los formatos descarga en estado pendiente (GET)
+    Route::get('/pendientes', [AgendamientoFormatoDescargaController::class, 'pendientes'])->name('api.agendamiento.formato-descarga.pendientes');
+});

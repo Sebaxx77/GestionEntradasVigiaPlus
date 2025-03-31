@@ -100,14 +100,26 @@ class AgendamientoFormatoDescargaController extends Controller
      * Opcional: Método para retornar datos de agendamientos filtrados por estado.
      * Esto puede ser útil para que la UI muestre en diferentes secciones según el estatus.
      */
-    public function index(Request $request)
+    public function otros()
     {
-        // Ejemplo: ?estatus=pendiente
-        $estatus = $request->query('estatus', 'pendiente');
-        $agendamientos = AgendamientoFormatoDescarga::where('estatus', $estatus)->where('tipo', 'formato_descarga')->get();
+        $agendamientos = AgendamientoFormatoDescarga::whereIn('estatus', ['aprobada', 'rechazada'])
+            ->where('tipo', 'formato_descarga')
+            ->get();
 
         return response()->json([
             'agendamientos' => $agendamientos
         ]);
     }
+
+    public function pendientes()
+    {
+        $agendamientos = AgendamientoFormatoDescarga::where('estatus', 'pendiente')
+            ->where('tipo', 'formato_descarga')
+            ->get();
+
+        return response()->json([
+            'agendamientos' => $agendamientos
+        ]);
+    }
+
 }
