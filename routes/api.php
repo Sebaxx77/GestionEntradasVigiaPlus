@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 // Modificación prefijo 
 Route::prefix('agendamientos/formato-descarga')->group(function () {
     // Ruta para crear un formato descarga (POST)
-    Route::post('/', [AgendamientoFormatoDescargaController::class, 'store'])->name('agendamiento.formato-descarga.store');
+    Route::post('/', [AgendamientoFormatoDescargaController::class, 'store'])->middleware('throttle:3,10')->name('agendamiento.formato-descarga.store');
 
     // Ruta para actualizar (por ejemplo, aprobación/rechazo) de un formato descarga (PUT)
     Route::put('/{id}', [AgendamientoFormatoDescargaController::class, 'update'])->name('agendamiento.formato-descarga.update');
