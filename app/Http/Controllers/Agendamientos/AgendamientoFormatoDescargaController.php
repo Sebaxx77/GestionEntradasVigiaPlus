@@ -59,31 +59,31 @@ class AgendamientoFormatoDescargaController extends Controller
             'estatus' => 'required|in:aprobada,rechazada',
         ]);
 
-        // Lógica para el caso de aprobación
+        // Caso de aprobación
         if ($validated['estatus'] === 'aprobada') {
             // Validamos campos adicionales necesarios para la aprobación
             $additionalValidated = $request->validate([
                 'autorizador'              => 'required|string|max:255',
-                'fecha_programada_entrega' => 'required|date',
+                'fecha_programada_entrega' => 'required|date|after_or_equal:' . $agendamiento->fecha_entrega,
                 'texto_respuesta_correo'   => 'required|string',
             ]);
 
             // Actualizamos el agendamiento con los datos adicionales
             $agendamiento->update($additionalValidated + $validated);
 
-            // Disparamos el envío de correo a las direcciones configuradas
-            // Aquí asumimos que AgendamientoAprobadoMail es un Mailable que recibe el modelo
-            Mail::to('sebastian.piamba@vigiaplus.com')->send((new AgendamientoAprobadoMail($agendamiento)));
+            // Enviamos el correo tanto a la dirección fija como al correo solicitante
+            Mail::to('sebastian.piamba@vigiaplus.com')
+                ->cc($agendamiento->correo_solicitante)
+                ->send(new AgendamientoAprobadoMail($agendamiento));
 
             return response()->json([
-                'message' => 'Solicitud aprobada y correo de confirmación enviado a Recepción Parque Industrial San Diego y Seguridad Colombia.',
-                'agendamiento' => $agendamiento
+                'message' => 'Solicitud aprobada y correo de confirmación enviado a Recepción Parque Industrial San Diego, Seguridad Colombia y al correo solicitante.',
+                'agendamiento' => $agendamiento,
             ]);
         }
 
-        // Lógica para el caso de rechazo
+        // Caso de rechazo
         if ($validated['estatus'] === 'rechazada') {
-
             $additionalValidated = $request->validate([
                 'texto_respuesta_correo'   => 'required|string',
             ]);
@@ -91,13 +91,13 @@ class AgendamientoFormatoDescargaController extends Controller
             // Actualizamos el agendamiento con los datos adicionales
             $agendamiento->update($additionalValidated + $validated);
 
-            // Enviar correo al solicitante con el Mailable de rechazo
+            // Enviamos el correo de rechazo solo al solicitante
             Mail::to($agendamiento->correo_solicitante)
                 ->send(new AgendamientoRechazadoMail($agendamiento));
 
             return response()->json([
                 'message' => 'Solicitud rechazada y correo de respuesta enviado.',
-                'agendamiento' => $agendamiento
+                'agendamiento' => $agendamiento,
             ]);
         }
     }
