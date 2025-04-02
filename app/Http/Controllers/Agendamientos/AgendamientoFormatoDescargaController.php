@@ -85,6 +85,7 @@ class AgendamientoFormatoDescargaController extends Controller
         // Caso de rechazo
         if ($validated['estatus'] === 'rechazada') {
             $additionalValidated = $request->validate([
+                'autorizador'              => 'required|string|max:255',
                 'texto_respuesta_correo'   => 'required|string',
             ]);
             
