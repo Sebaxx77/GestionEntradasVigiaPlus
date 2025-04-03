@@ -1,24 +1,31 @@
 <x-mail::message>
-    # Agendamiento Rechazado
+    <h1 style="font-size: 28px; color: #1F2937; text-align: center; margin-bottom: 20px; margin-top: 20px;">Agendamiento de Descarga Rechazado</h1>
 
-    Lamentamos informarte que tu solicitud de agendamiento con OP: **{{ $agendamiento->op }}** ha sido {{
-    $agendamiento->estatus }}.
+    <p style="font-size: 16px; color: #333;">
+        -La solicitud de agendamiento de ingreso para descarga, correspondiente a el numero de Orden de Producción(OP): <strong>{{ $agendamiento->op }}</strong>
+    </p>
 
-    **Detalles de la solicitud:**
+    <p>
+        ha sido <span style="color: #b91010; font-weight: bold;">{{ $agendamiento->estatus }}</span>
+    </p>
 
-    - **Fecha de Agendamiento:** {{ $agendamiento->fecha_entrega }}
-    - **Proveedor:** {{ $agendamiento->proveedor }}
-    - **Placa:** {{ $agendamiento->placa }}
-    - **Conductor:** {{ $agendamiento->conductor }}
-    - **Cédula:** {{ $agendamiento->cedula }}
-    - **Bodega:** {{ $agendamiento->bodega }}
-    - **Correo solicitante:** {{ $agendamiento->correo_solicitante }}
+    <x-mail::panel>
+        <p style="margin: 0; font-size: 16px; color: #555;"><strong>MOTIVOS:</strong> {{ $agendamiento->texto_respuesta_correo }}</p>
+    </x-mail::panel>
 
-    - **Comentarios:** {{ $agendamiento->texto_respuesta_correo }}
+    <h3 style="font-size: 18px; color: #1F2937; margin-top: 20px;">Detalles de la solicitud:</h3>
+    <ul style="padding-left: 20px; font-size: 16px; color: #555; list-style-type: disc;">
+        <li><strong>Proveedor:</strong> {{ $agendamiento->proveedor }}</li>
+        <li><strong>Placa:</strong> {{ $agendamiento->placa }}</li>
+        <li><strong>Conductor:</strong> {{ $agendamiento->conductor }}</li>
+        <li><strong>Cédula:</strong> {{ $agendamiento->cedula }}</li>
+        <li><strong>Bodega:</strong> {{ $agendamiento->bodega }}</li>
+    </ul>
 
-    Si consideras que se trata de un error o necesitas mayor información, por favor adjunta esta solicitud y responde a
-    el siguiente correo sebastian.piamba@vigiaplus.com
+    <p style="font-size: 16px; color: #333;">
+        Autorizado y revisado por: <strong>{{ $agendamiento->autorizador }}</strong>.
+    </p>
 
-    Gracias,<br>
-    {{ config('app.name') }}
+    <p style="margin-bottom: 20px ;margin-top: 20px; font-size: 16px; color: #333;">Atentamente,<br>
+    <strong>Vigia Plus Logistics.</strong></p>
 </x-mail::message>

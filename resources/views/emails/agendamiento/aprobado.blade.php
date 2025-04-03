@@ -3,7 +3,14 @@
 
     <p style="font-size: 16px; color: #333;">
         -La solicitud de agendamiento de ingreso para descarga, correspondiente a el numero de Orden de Producción(OP): <strong>{{ $agendamiento->op }}</strong>
-        ha sido <span style="color: #10B981; font-weight: bold;">{{ $agendamiento->estatus }}</span>, para la fecha(AAAA-MM-DD): <strong>{{ $agendamiento->fecha_programada_entrega }}</strong>.
+    </p>
+
+    <p>
+        ha sido <span style="color: #10B981; font-weight: bold;">{{ $agendamiento->estatus }}</span>, para la fecha:
+    </p>
+
+    <p>
+        <strong>{{ $agendamiento->fecha_programada_entrega }} (AAAA-MM-DD)</strong>
     </p>
 
     <x-mail::panel>
@@ -20,7 +27,7 @@
     </ul>
 
     <p style="font-size: 16px; color: #333;">
-        Autorizado por: <strong>{{ $agendamiento->autorizador }}</strong>.
+        Autorizado y revisado por: <strong>{{ $agendamiento->autorizador }}</strong>.
     </p>
 
     <p style="margin-bottom: 20px ;margin-top: 20px; font-size: 16px; color: #333;">Atentamente,<br>
