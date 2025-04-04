@@ -42,4 +42,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    /**
+     * Relación: Muchos usuarios pueden pertenecer a una operación.
+     */
+    public function operacion() 
+    {
+        return $this->belongsTo(Operacion::class);
+    }
 }
