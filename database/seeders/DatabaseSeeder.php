@@ -12,11 +12,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // Llamar a los seeders en el orden correcto
+        $this->call([
+            ParquesIndustrialesSeeder::class,
+            OperacionesSeeder::class,
+            CorreosNotificablesSeeder::class,
+        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->command->info("Seeders ejecutados en el orden correcto.");
     }
 }
