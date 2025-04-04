@@ -14,9 +14,11 @@ class DatabaseSeeder extends Seeder
     {
         // Llamar a los seeders en el orden correcto
         $this->call([
+            RoleAndPermissionSeeder::class,
             ParquesIndustrialesSeeder::class,
             OperacionesSeeder::class,
             CorreosNotificablesSeeder::class,
+            UserSeeder::class,
         ]);
 
         $this->command->info("Seeders ejecutados en el orden correcto.");
