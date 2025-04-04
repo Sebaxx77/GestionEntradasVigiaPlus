@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Recuperamos la operación "Tecnología" (ya creada por OperacionSeeder)
+        // Recuperamos la operación "Vigia Plus" (ya creada por OperacionSeeder)
         $operacion =    Operacion::where('nombre', 'Vigia Plus')->first();
 
         // Crear un usuario Administrador con rol asignado y operación asignada

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Operacion;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -29,6 +30,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => Hash::make('12345'),
             'remember_token' => Str::random(10),
+            'operacion_id' => Operacion::inRandomOrder()->first()->id, // Asigna un operacion_id aleatorio
         ];
     }
 
