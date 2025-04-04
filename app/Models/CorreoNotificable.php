@@ -14,7 +14,7 @@ class CorreoNotificable extends Model
      *
      * @var string
      */
-    protected $table = 'parques_industriales';
+    protected $table = 'correos_notificables';
 
     /**
      * Los atributos que se pueden asignar masivamente.
