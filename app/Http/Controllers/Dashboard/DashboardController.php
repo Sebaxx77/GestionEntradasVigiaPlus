@@ -23,13 +23,23 @@ class DashboardController extends Controller
                 'message' => 'Bienvenido al panel del administrador.'
             ], 200);
         }
+        if ($user->hasRole('Supervisor Agendamientos')) {
+            $solicitudesDescarga = AgendamientoFormatoDescarga::all(); // Creamos una consulta para obtener todas las solicitudes de descarga
+            $solicitudesVisita = AgendamientoFormatoVisita::all(); // Filtramos las solicitudes de descarga con estado 'Visita'
+
+            return response()->json([
+                'rol' => 'Supervisor Agendamientos',
+                'solicitudesDescarga' => $solicitudesDescarga,
+                'solicitudesVisita' => $solicitudesVisita,
+            ], 200);
+        }
 
         if ($user->hasRole('Autorizador Agendamientos')) {
             $solicitudesDescarga = AgendamientoFormatoDescarga::all(); // Creamos una consulta para obtener todas las solicitudes de descarga
             $solicitudesVisita = AgendamientoFormatoVisita::all(); // Filtramos las solicitudes de descarga con estado 'Visita'
 
             return response()->json([
-                'rol' => 'Autorizador',
+                'rol' => 'Autorizador Agendamientos',
                 'solicitudesDescarga' => $solicitudesDescarga,
                 'solicitudesVisita' => $solicitudesVisita,
             ], 200);
