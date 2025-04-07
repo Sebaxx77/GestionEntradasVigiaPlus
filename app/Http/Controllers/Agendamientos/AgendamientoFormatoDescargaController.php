@@ -16,31 +16,38 @@ class AgendamientoFormatoDescargaController extends Controller
      */
     public function store(Request $request)
     {
-        // Validación de los campos obligatorios para la creación inicial
+        // Paso 1: Validar todos los campos, incluyendo el PDF como opcional
         $validated = $request->validate([
             'op'                    => 'required|integer',
             'fecha_entrega'         => 'required|date|after_or_equal:tomorrow',
             'proveedor'             => 'required|string|max:255',
             'codigo_articulo'       => 'required|string|max:100',
             'nombre_articulo'       => 'required|string|max:255',
-            'cantidades_pedidas'    => 'required|integer', // Se modifica el campo a integer
+            'cantidades_pedidas'    => 'required|integer',
             'placa'                 => 'required|string|max:20',
             'conductor'             => 'required|string|max:255',
             'cedula'                => 'required|string|max:20',
             'bodega'                => 'required|string|max:100',
             'correo_solicitante'    => 'required|email|max:255',
             'celular'               => 'required|string|max:20',
+            'op_pdf'                => 'nullable|file|mimes:pdf|max:4048', // Opcional pero validado si se envía
         ]);
-
+    
+        // Paso 2: Procesar el PDF (si se envió) y añadirlo al array $validated
+        if ($request->hasFile('op_pdf')) {
+            $rutaPDF = $request->file('op_pdf')->store('agendamientos', 'public');
+            $validated['op_pdf'] = $rutaPDF;
+        }
+    
+        // Paso 3: Crear el registro con todos los datos validados
         $agendamiento = AgendamientoFormatoDescarga::create($validated + [
             'estatus'                  => 'pendiente',
             'autorizador'              => null,
             'fecha_programada_entrega' => null,
             'texto_respuesta_correo'   => null,
-            'tipo'                     => 'formato_descarga', // Campo para diferenciar el tipo
+            'tipo'                     => 'formato_descarga',
         ]);
-
-        // Retornamos la respuesta en formato JSON
+    
         return response()->json([
             'message' => 'Solicitud enviada correctamente. Será revisada por nuestro equipo.',
             'agendamiento' => $agendamiento
