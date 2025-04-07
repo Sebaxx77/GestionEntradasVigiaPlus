@@ -40,5 +40,6 @@ class AgendamientoFormatoDescarga extends Model
         'texto_respuesta_correo',
         'celular',
         'tipo', // Campo para identificar el formato, por ejemplo: "formato_descarga"
+        'op_pdf', // Campo para almacenar la ruta del PDF
     ];
 }
