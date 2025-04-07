@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Operacion;
+use App\Models\LogicaNegocio\Operacion;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
