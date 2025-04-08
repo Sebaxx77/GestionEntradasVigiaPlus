@@ -5,27 +5,42 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Agendamientos\AgendamientoFormatoDescarga;
 use App\Models\Agendamientos\AgendamientoFormatoVisita;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
-    /**
-     * Retorna datos del dashboard según el rol del usuario.
-     */
     public function index(Request $request)
     {
         $user = $request->user();
 
         if ($user->hasRole('Administrador')) {
+            $totalPermisos = Permission::count();
+            $totalRoles = Role::count();
+            $totalUsuarios = User::count();
+            $ultimosUsuarios = User::latest()->take(5)->get()->map(function ($u) {
+                return [
+                    'name' => $u->name,
+                    'email' => $u->email,
+                    'created_at' => $u->created_at,
+                ];
+            });
+
             return response()->json([
                 'rol' => 'Administrador',
-                'message' => 'Bienvenido al panel del administrador.'
+                'message' => 'Bienvenido al panel del administrador.',
+                'total_permisos' => $totalPermisos,
+                'total_roles' => $totalRoles,
+                'total_usuarios' => $totalUsuarios,
+                'ultimos_usuarios' => $ultimosUsuarios,
             ], 200);
         }
         if ($user->hasRole('Supervisor Agendamientos')) {
-            $solicitudesDescarga = AgendamientoFormatoDescarga::all(); // Creamos una consulta para obtener todas las solicitudes de descarga
-            $solicitudesVisita = AgendamientoFormatoVisita::all(); // Filtramos las solicitudes de descarga con estado 'Visita'
+            $solicitudesDescarga = AgendamientoFormatoDescarga::all();
+            $solicitudesVisita = AgendamientoFormatoVisita::all();
 
             return response()->json([
                 'rol' => 'Supervisor Agendamientos',
@@ -35,8 +50,8 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('Autorizador Agendamientos')) {
-            $solicitudesDescarga = AgendamientoFormatoDescarga::all(); // Creamos una consulta para obtener todas las solicitudes de descarga
-            $solicitudesVisita = AgendamientoFormatoVisita::all(); // Filtramos las solicitudes de descarga con estado 'Visita'
+            $solicitudesDescarga = AgendamientoFormatoDescarga::all();
+            $solicitudesVisita = AgendamientoFormatoVisita::all();
 
             return response()->json([
                 'rol' => 'Autorizador Agendamientos',
