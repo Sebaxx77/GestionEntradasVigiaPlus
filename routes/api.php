@@ -28,16 +28,18 @@ Route::post('auth/forgot-password', [AuthController::class, 'forgotPassword'])->
 Route::post('auth/reset-password', [AuthController::class, 'resetPassword'])->name('api.auth.reset-password');
 
 // POST para crear un formato de descarga (limitado por throttle)
-Route::post('agendamientos/formato-descarga', [AgendamientoFormatoDescargaController::class, 'store'])
-    ->middleware('throttle:5,1') // 5 peticiones por minuto
-    ->name('agendamiento.formato-descarga.store');
+Route::post('agendamientos/formato-descarga', [AgendamientoFormatoDescargaController::class, 'store'])->middleware('throttle:5,1') // 5 peticiones por minuto
+->name('agendamiento.formato-descarga.store');
 
 // Rutas protegidas por middleware, auth:sanctum
 Route::middleware('auth:sanctum')->group(function () {
-
-    // Rutas de Autenticación protegidas (logout, obtener usuario autenticado)
+    
+    // Rutas de Autenticación
     Route::get('auth/me', [AuthController::class, 'me'])->name('api.auth.me');
     Route::post('auth/logout', [AuthController::class, 'logout'])->name('api.auth.logout');
+
+    // Dashboard (acceso según rol)
+    Route::get('dashboard', [DashboardController::class, 'index']);
 
     // Roles
     Route::apiResource('roles', RoleController::class);
@@ -50,9 +52,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Parques Industriales
     Route::apiResource('parques-industriales', ParqueController::class);
-
-    // Dashboard (acceso según rol)
-    Route::get('dashboard', [DashboardController::class, 'index']);
 
     // Usuarios
     Route::apiResource('usuarios', UsuarioController::class);

@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use App\Models\User; // Asegúrate de importar tu modelo de Usuario
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail; // Si vas a enviar correos
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -59,15 +60,18 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        Log::info('API Logout Request User:', $request->user()); // Verifica si el usuario está autenticado
-        if ($request->user()) {
-            $revoked = $request->user()->currentAccessToken()->delete();
-            Log::info('API Token Revocation Status:', ['revoked' => $revoked]); // Verifica si la revocación fue exitosa
+        $user = $request->user(); // Obtener el usuario autenticado
+
+        // Si el usuario está autenticado, revocamos su token actual
+        if ($user) {
+            // Eliminar el token actual (revocar el token activo)
+            $request->user()->currentAccessToken()->delete(); 
+
+            // Responder que la sesión fue cerrada correctamente
             return response()->json(['message' => 'Sesión cerrada correctamente, token revocado.']);
-        } else {
-            Log::warning('API Logout: Usuario no autenticado.');
-            return response()->json(['message' => 'No se pudo cerrar sesión, usuario no autenticado.'], 401);
         }
+
+        return response()->json(['message' => 'No se pudo cerrar sesión, usuario no autenticado.'], 401);
     }
 
     /**
