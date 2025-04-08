@@ -50,13 +50,28 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('Autorizador Agendamientos')) {
-            $solicitudesDescarga = AgendamientoFormatoDescarga::all();
-            $solicitudesVisita = AgendamientoFormatoVisita::all();
+            // Obtener el total de solicitudes
+            $totalSolicitudesDescarga = AgendamientoFormatoDescarga::count();
 
+            // Obtener el total de solicitudes pendientes
+            $solicitudesPendientesDescarga = AgendamientoFormatoDescarga::where('estatus', 'pendiente')->count();
+
+            // Obtener las últimas 5 solicitudes de agendamiento
+            $ultimasSolicitudesDescarga = AgendamientoFormatoDescarga::latest()->take(5)->get()->map(function ($solicitud) {
+                return [
+                    'op' => $solicitud->op,
+                    'proveedor' => $solicitud->proveedor,
+                    'bodega' => $solicitud->bodega,
+                    'fecha_entrega' => $solicitud->fecha_entrega->format('d/m/Y'),
+                ];
+            });
+        
             return response()->json([
                 'rol' => 'Autorizador Agendamientos',
-                'solicitudesDescarga' => $solicitudesDescarga,
-                'solicitudesVisita' => $solicitudesVisita,
+                'message' => 'Bienvenido al panel del autorizador de agendamientos.',
+                'total_solicitudes' => $totalSolicitudesDescarga,
+                'solicitudes_pendientes' => $solicitudesPendientesDescarga,
+                'ultimas_solicitudes' => $ultimasSolicitudesDescarga,
             ], 200);
         }
 
