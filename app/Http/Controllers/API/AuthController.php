@@ -131,6 +131,16 @@ class AuthController extends Controller
     }
     public function me(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user()->load('roles'); // Carga la relación 'roles'
+
+        $roleName = $user->roles->first()->name ?? null; // Obtiene el nombre del primer rol (asumiendo que tiene uno)
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $roleName,
+            // ... otra información del usuario ...
+        ]);
     }
 }
