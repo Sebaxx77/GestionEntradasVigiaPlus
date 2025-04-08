@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Models\User; // Asegúrate de importar tu modelo de Usuario
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail; // Si vas a enviar correos
 
 class AuthController extends Controller
@@ -58,12 +59,15 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        // Revocar el token actual del usuario
-        $request->user()->currentAccessToken()->delete();
-
-        return response()->json([
-            'message' => 'Sesión cerrada correctamente, token revocado.'
-        ]);
+        Log::info('API Logout Request User:', $request->user()); // Verifica si el usuario está autenticado
+        if ($request->user()) {
+            $revoked = $request->user()->currentAccessToken()->delete();
+            Log::info('API Token Revocation Status:', ['revoked' => $revoked]); // Verifica si la revocación fue exitosa
+            return response()->json(['message' => 'Sesión cerrada correctamente, token revocado.']);
+        } else {
+            Log::warning('API Logout: Usuario no autenticado.');
+            return response()->json(['message' => 'No se pudo cerrar sesión, usuario no autenticado.'], 401);
+        }
     }
 
     /**

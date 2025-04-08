@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('agendamientos', function (Blueprint $table) {
+        Schema::table('agendamientos_descarga', function (Blueprint $table) {
             $table->dropColumn('op_pdf'); // Eliminar la columna op_pdf
         });
     }
