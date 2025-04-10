@@ -114,14 +114,50 @@ class AgendamientoFormatoDescargaController extends Controller
      * Opcional: Método para retornar datos de agendamientos filtrados por estado.
      * Esto puede ser útil para que la UI muestre en diferentes secciones según el estatus.
      */
-    public function otros()
+    public function otros(Request $request)
     {
-        $agendamientos = AgendamientoFormatoDescarga::whereIn('estatus', ['aprobada', 'rechazada'])
-            ->where('tipo', 'formato_descarga')
-            ->get();
+        // Base query sin filtros
+        $baseQuery = AgendamientoFormatoDescarga::whereIn('estatus', ['aprobada', 'rechazada'])
+            ->where('tipo', 'formato_descarga');
 
+        // Total sin filtros
+        $total = $baseQuery->count();
+
+        // Clonamos para aplicar filtros sin alterar el total
+        $query = clone $baseQuery;
+
+        // Filtro de búsqueda solo por correo_solicitante y cedula
+        if ($search = $request->input('search.value')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('correo_solicitante', 'LIKE', "%{$search}%")
+                ->orWhere('cedula', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Total filtrado
+        $filtered = $query->count();
+
+        // Ordenamiento
+        $orderColumnIndex = $request->input('order.0.column');
+        $orderColumnName = $request->input("columns.$orderColumnIndex.data");
+        $orderDir = $request->input('order.0.dir', 'asc');
+
+        $sortableColumns = ['fecha_entrega', 'bodega', 'op', 'correo_solicitante', 'estatus', 'created_at'];
+        if (in_array($orderColumnName, $sortableColumns)) {
+            $query->orderBy($orderColumnName, $orderDir);
+        }
+
+        // Paginación
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $data = $query->skip($start)->take($length)->get();
+
+        // Respuesta JSON para DataTables
         return response()->json([
-            'agendamientos' => $agendamientos
+            'draw' => intval($request->input('draw')),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $filtered,
+            'data' => $data,
         ]);
     }
 

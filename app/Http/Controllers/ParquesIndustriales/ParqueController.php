@@ -11,13 +11,48 @@ class ParqueController extends Controller
     /**
      * Lista todos los parques industriales.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $parques = ParqueIndustrial::all();
+        $query = ParqueIndustrial::query();
+
+        // Búsqueda
+        if ($search = $request->input('search.value')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nombre', 'LIKE', "%{$search}%")
+                ->orWhere('direccion', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Ordenamiento
+        $orderColumnIndex = $request->input('order.0.column');
+        $orderColumnName = $request->input("columns.$orderColumnIndex.data");
+        $orderDir = $request->input('order.0.dir', 'asc');
+
+        $sortableColumns = ['nombre', 'direccion'];  // Definir las columnas que se pueden ordenar
+
+        if (in_array($orderColumnName, $sortableColumns)) {
+            $query->orderBy($orderColumnName, $orderDir);
+        }
+
+        // Paginación
+        $total = $query->count();
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+
+        $data = $query->skip($start)->take($length)->get()->map(function ($parque) {
+            return [
+                'id' => $parque->id,
+                'nombre' => $parque->nombre,
+                'direccion' => $parque->direccion,
+            ];
+        });
 
         return response()->json([
-            'parques' => $parques
-        ], 200);
+            'draw' => intval($request->input('draw')),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total, // El total de registros filtrados puede ser diferente si la búsqueda está activa
+            'data' => $data,
+        ]);
     }
 
     /**

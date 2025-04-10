@@ -21,7 +21,6 @@ return [
 
     'allowed_origins' => [env('UI_URL')],
 
-
     'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
