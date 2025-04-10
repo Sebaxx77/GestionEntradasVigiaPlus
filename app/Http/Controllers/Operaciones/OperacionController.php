@@ -11,31 +11,44 @@ class OperacionController extends Controller
     /**
      * Lista todas las operaciones.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $operaciones = Operacion::all();
+        $query = Operacion::with(['parquesIndustriales', 'correosNotificables']);
+
+        // Búsqueda
+        if ($search = $request->input('search.value')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nombre', 'LIKE', "%{$search}%")
+                ->orWhereHas('parquesIndustriales', function ($q) use ($search) {
+                    $q->where('nombre', 'LIKE', "%{$search}%");
+                });
+            });
+        }
+
+        // Ordenamiento
+        $orderColumnIndex = $request->input('order.0.column');
+        $orderColumnName = $request->input("columns.$orderColumnIndex.data");
+        $orderDir = $request->input('order.0.dir', 'asc');
+
+        $sortableColumns = ['nombre']; // solo columnas base
+
+        if (in_array($orderColumnName, $sortableColumns)) {
+            $query->orderBy($orderColumnName, $orderDir);
+        }
+
+        // Paginación
+        $total = $query->count();
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+
+        $data = $query->skip($start)->take($length)->get();
 
         return response()->json([
-            'operaciones' => $operaciones
-        ], 200);
-    }
-
-    /**
-     * Almacena una nueva operación.
-     */
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'bodega' => 'required|string|max:255',
+            'draw' => intval($request->input('draw')),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total,
+            'data' => $data,
         ]);
-
-        $operacion = Operacion::create($data);
-
-        return response()->json([
-            'message'    => 'Operación creada correctamente.',
-            'operacion'  => $operacion,
-        ], 201);
     }
 
     /**

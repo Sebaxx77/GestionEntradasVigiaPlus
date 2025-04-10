@@ -16,31 +16,41 @@ class UsuarioController extends Controller
      */
     public function index(Request $request)
     {
-        // Consulta base incluyendo relaciones necesarias
         $query = User::with('operacion', 'roles');
 
-        // Filtrado por término de búsqueda
-        if ($search = $request->get('search')) {
+        // Búsqueda
+        if ($search = $request->input('search.value')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
                 ->orWhere('email', 'LIKE', "%{$search}%");
             });
         }
 
-        // Paginar los resultados, 10 usuarios por página
-        $usuarios = $query->paginate(10);
+        // Ordenamiento
+        $orderColumnIndex = $request->input('order.0.column');
+        $orderColumnName = $request->input("columns.$orderColumnIndex.data");
+        $orderDir = $request->input('order.0.dir', 'asc');
 
-        // Cargar roles, permisos y operaciones
-        $roles = Role::all();
-        $permissions = Permission::all();
-        $operaciones = Operacion::all();
+        // Solo ordenamos por columnas simples
+        $sortableColumns = ['name', 'email'];
+
+        if (in_array($orderColumnName, $sortableColumns)) {
+            $query->orderBy($orderColumnName, $orderDir);
+        }
+
+        // Paginación
+        $total = $query->count();
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+
+        $data = $query->skip($start)->take($length)->get();
 
         return response()->json([
-            'usuarios'    => $usuarios,
-            'roles'       => $roles,
-            'permissions' => $permissions,
-            'operaciones' => $operaciones,
-        ], 200);
+            'draw' => intval($request->input('draw')),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total,
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -83,8 +93,13 @@ class UsuarioController extends Controller
     public function show($id)
     {
         $usuario = User::with('operacion', 'roles')->findOrFail($id);
+        $roles = Role::all();
+        $operaciones = Operacion::all();
+
         return response()->json([
             'usuario' => $usuario,
+            'roles' => $roles,
+            'operaciones' => $operaciones,
         ], 200);
     }
 
