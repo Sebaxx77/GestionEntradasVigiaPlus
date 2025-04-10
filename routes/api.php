@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgendamientoController;
 use App\Http\Controllers\Agendamientos\AgendamientoFormatoDescargaController;
 use App\Http\Controllers\API\AuthController; // Asegúrate de que este namespace sea correcto
+use App\Http\Controllers\CorreosNotificables\CorreoNotificableController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Operaciones\OperacionController;
 use App\Http\Controllers\ParquesIndustriales\ParqueController;
@@ -52,6 +53,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Parques Industriales
     Route::apiResource('parques-industriales', ParqueController::class);
+
+    // Correos Notificables
+    Route::apiResource('correos-notificables', CorreoNotificableController::class);
 
     // Usuarios
     Route::apiResource('usuarios', UsuarioController::class);
