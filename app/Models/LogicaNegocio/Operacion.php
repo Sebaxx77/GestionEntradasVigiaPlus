@@ -44,10 +44,10 @@ class Operacion extends Model
     }
 
     /**
-     * Relación: Muchas operaciones pueden pertenecer a un parque industrial.
+     * Relación: Muchas operaciones pueden pertenecer a Muchos parques industriales.
      */
     public function parquesIndustriales()
     {
-        return $this->belongsTo(ParqueIndustrial::class);
+        return $this->belongsToMany(ParqueIndustrial::class);
     }
 }

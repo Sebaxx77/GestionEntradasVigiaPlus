@@ -27,10 +27,10 @@ class ParqueIndustrial extends Model
     ];
 
     /**
-     * Relación: Un parque industrial puede tener muchas operaciones.
+     * Relación: Muchos industrial puede tener muchas operaciones.
      */
     public function operaciones()
     {
-        return $this->hasMany(Operacion::class);
+        return $this->belongsToMany(Operacion::class);
     }
 }

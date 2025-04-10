@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('operaciones', function (Blueprint $table) {
-            // Agregar la clave foránea a operaciones
+        Schema::create('operacion_parque_industrial', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('operacion_id')->constrained('operaciones')->onDelete('cascade');
             $table->foreignId('parque_industrial_id')->constrained('parques_industriales')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -22,11 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('operaciones', function (Blueprint $table) {
-            // Eliminar la clave foránea primero
-            $table->dropForeign(['parque_industrial_id']);
-            // Luego eliminar la columna
-            $table->dropColumn('parque_industrial_id');
-        });
+        Schema::dropIfExists('operacion_parque_industrial');
     }
 };
