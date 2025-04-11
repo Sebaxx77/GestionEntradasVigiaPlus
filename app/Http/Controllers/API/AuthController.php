@@ -5,13 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Models\User; // Asegúrate de importar tu modelo de Usuario
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail; // Si vas a enviar correos
-use Laravel\Sanctum\PersonalAccessToken;
+use PragmaRX\Google2FA\Google2FA;
 
 class AuthController extends Controller
 {
@@ -23,32 +20,48 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // Validar credenciales
+        // Validar credenciales básicas
         $credentials = $request->validate([
             'email'    => 'required|email',
-            'password' => 'required|string'
+            'password' => 'required|string',
         ]);
 
-        // Intentar autenticar
-        if (!Auth::attempt($credentials)) {
+        // Intentar autenticar con guard 'web'
+        if (!Auth::guard('web')->attempt($credentials)) {
             return response()->json([
-                'message' => 'Credenciales inválidas'
+                'message' => 'Credenciales inválidas',
             ], 401);
         }
 
-        // Autenticación exitosa, obtenemos el usuario autenticado
-        $user = $request->user();
+        /** @var \App\Models\User $user */
+        $user = Auth::guard('web')->user();
 
-        // Revocar tokens anteriores para asegurar que sólo exista uno activo
+        // Si el usuario tiene activo 2FA, validamos el código
+        if ($user->two_factor_secret) {
+            $request->validate([
+                '2fa_code' => 'required|digits:6',
+            ]);
+
+            $google2fa = new Google2FA();
+            $valid = $google2fa->verifyKey(decrypt($user->two_factor_secret), $request->input('2fa_code'));
+
+            if (! $valid) {
+                return response()->json([
+                    'message' => 'Código 2FA inválido',
+                ], 403);
+            }
+        }
+
+        // Revocar tokens anteriores
         $user->tokens()->delete();
 
-        // Crear un nuevo token para la sesión actual
+        // Crear nuevo token para la API
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'access_token' => $token,
             'token_type'   => 'Bearer',
-            'user'         => $user
+            'user'         => $user,
         ]);
     }
 

@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\AgendamientoController;
 use App\Http\Controllers\Agendamientos\AgendamientoFormatoDescargaController;
 use App\Http\Controllers\API\AuthController; // Asegúrate de que este namespace sea correcto
 use App\Http\Controllers\CorreosNotificables\CorreoNotificableController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Operaciones\OperacionController;
 use App\Http\Controllers\ParquesIndustriales\ParqueController;
+use App\Http\Controllers\Perfil\PerfilController;
 use App\Http\Controllers\Seguridad\PermissionController;
 use App\Http\Controllers\Seguridad\RoleController;
 use App\Http\Controllers\Usuarios\UsuarioController;
@@ -38,6 +38,15 @@ Route::middleware('auth:sanctum')->group(function () {
     // Rutas de Autenticación
     Route::get('auth/me', [AuthController::class, 'me'])->name('api.auth.me');
     Route::post('auth/logout', [AuthController::class, 'logout'])->name('api.auth.logout');
+
+    // Rutas para manejar el Perfil del Usuario
+    
+    // Mostrar perfil
+    Route::get('perfil/show', [PerfilController::class, 'showProfile']);
+    // Actualizar perfil
+    Route::put('perfil/update', [PerfilController::class, 'updateProfile']);
+    // Activar / Desactivar 2FA
+    Route::post('perfil/2FA', [PerfilController::class, 'toggleTwoFactor']);
 
     // Dashboard (acceso según rol)
     Route::get('dashboard', [DashboardController::class, 'index']);
