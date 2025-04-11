@@ -66,6 +66,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Correos Notificables
     Route::apiResource('correos-notificables', CorreoNotificableController::class);
 
+    // Rutas adicionales para usuarios importantes definirlas antes de las rutas de usuarios o cualquier ruta con apiResource que use el mismo prefijo
+    Route::get('/usuarios/create-data', [UsuarioController::class, 'datosParaCrearUsuario']);
+    Route::get('/usuarios/edit-data/{id}', [UsuarioController::class, 'datosParaEditarUsuario']);
+
     // Usuarios
     Route::apiResource('usuarios', UsuarioController::class);
 

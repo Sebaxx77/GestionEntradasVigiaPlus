@@ -14,56 +14,45 @@ class RoleAndPermissionSeeder extends Seeder
      */
     public function run()
     {
+        $guard = 'sanctum'; // <--- Aseguramos que todo se registre con este guard
+
         /*
          * Definir permisos por módulos:
          */
+        $permisos = [
+            'Administrar Permisos',
+            'Administrar Roles',
+            'Administrar Usuarios',
+            'Administrar Operaciones',
+            'Administrar Parques Industriales',
+            'Administrar Correos Notificables',
+            'Gestionar Agendamientos Descarga',
+            'Supervisar Agendamientos Descarga',
+            'Gestionar Agendamientos Visitas',
+        ];
 
-        // Permisos para el módulo de Permisos
-        Permission::create(['name' => 'Administrar Permisos']);
-
-        // Permisos para el módulo de Roles
-        Permission::create(['name' => 'Administrar Roles']);
-
-        // Permisos para el módulo de Usuarios
-        Permission::create(['name' => 'Administrar Usuarios']);
-
-        // Permisos para el módulo de Operaciones
-        Permission::create(['name' => 'Administrar Operaciones']);
-
-        // Permisos para el módulo de Parques Industriales
-        Permission::create(['name'=> 'Administrar Parques Industriales']);
-
-        // Permisos para el módulo de Correos Notificables por Operación
-        Permission::create(['name'=> 'Administrar Correos Notificables']);
-
-        // Permisos para el modulo de Agendamientos Descarga
-        Permission::create(['name' => 'Gestionar Agendamientos Descarga']);
-
-        Permission::create(['name'=> 'Supervisar Agendamientos Descarga']);
-
-        // Permisos para el módulo de Agendamiento Visitas
-        Permission::create(['name'=> 'Gestionar Agendamientos Visitas']);
+        foreach ($permisos as $permiso) {
+            Permission::create(['name' => $permiso, 'guard_name' => $guard]);
+        }
 
         /*
          * Crear roles y asignar permisos:
          */
 
         // Rol Administrador: acceso a todos los permisos
-        $admin = Role::create(['name' => 'Administrador']);
+        $admin = Role::create(['name' => 'Administrador', 'guard_name' => $guard]);
         $admin->givePermissionTo(Permission::all());
 
         // Rol Autorizador: acceso a gestionar agendamientos (aprobar/rechazar)
-        $autorizador = Role::create(['name' => 'Autorizador Agendamientos']);
+        $autorizador = Role::create(['name' => 'Autorizador Agendamientos', 'guard_name' => $guard]);
         $autorizador->givePermissionTo([
-            // Agendamientos
             'Gestionar Agendamientos Descarga',
             'Supervisar Agendamientos Descarga',
         ]);
 
-        // Rol Supervisor Agendamientos: acceso a agendamientos (visualizacion de agendamientos y detalles)
-        $autorizador = Role::create(['name' => 'Supervisor Agendamientos']);
-        $autorizador->givePermissionTo([
-            // Agendamientos
+        // Rol Supervisor Agendamientos
+        $supervisor = Role::create(['name' => 'Supervisor Agendamientos', 'guard_name' => $guard]);
+        $supervisor->givePermissionTo([
             'Supervisar Agendamientos Descarga',
         ]);
     }

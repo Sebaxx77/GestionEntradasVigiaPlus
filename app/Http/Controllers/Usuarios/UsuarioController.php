@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\LogicaNegocio\Operacion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -58,34 +59,71 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar datos de entrada
+        Log::info('Datos recibidos para crear usuario:', $request->all());
+
         $data = $request->validate([
             'name'         => 'required|string|max:255',
             'email'        => 'required|email|unique:users,email',
-            'password'     => 'required|string|min:6|confirmed',
-            'role'         => 'required|string',              // Nombre o slug del rol
-            'operacion_id' => 'required|exists:operaciones,id', // Operación válida
+            'password'     => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/[A-Z]/',          // Al menos una letra mayúscula
+                'regex:/\d/',             // Al menos un número
+                'regex:/[@$!%*#?&+.;]/',     // Al menos un carácter especial
+            ],
+            'role' => 'required|exists:roles,id',
+            'operacion' => 'required|numeric|exists:operaciones,id',
         ]);
 
-        // Cifrar la contraseña
         $data['password'] = bcrypt($data['password']);
 
-        // Crear el usuario
         $usuario = User::create([
             'name'         => $data['name'],
             'email'        => $data['email'],
             'password'     => $data['password'],
-            'operacion_id' => $data['operacion_id'],
+            'operacion_id' => $data['operacion'],
         ]);
 
-        // Asignar el rol utilizando Spatie
-        $usuario->assignRole($data['role']);
+        $role = Role::findOrFail($data['role']);
+        $usuario->assignRole($role->name);
 
         return response()->json([
             'message' => 'Usuario creado exitosamente.',
             'usuario' => $usuario,
         ], 201);
     }
+
+    /**
+     * Muestra los datos necesarios para crear un nuevo usuario.
+     */
+    public function datosParaCrearUsuario()
+    {
+        $roles = Role::all();
+        $operaciones = Operacion::all();
+
+        return response()->json([
+            'role' => $roles,
+            'operacion' => $operaciones,
+        ]);
+    }
+    /**
+     * Muestra los datos necesarios para editar un usuario existente.
+     */
+    public function datosParaEditarUsuario($id)
+    {
+        $usuario = User::with(['roles', 'operaciones'])->findOrFail($id); // Asegúrate de que tengas estas relaciones definidas
+        $roles = Role::all();
+        $operaciones = Operacion::all();
+
+        return response()->json([
+            'usuario' => $usuario,
+            'role' => $roles,
+            'operacion' => $operaciones,
+        ]);
+    }
+
 
     /**
      * Muestra los datos de un usuario en particular.

@@ -31,6 +31,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'operacion_id', // Agregamos el campo necesario
     ];
 
     /**
